@@ -7,26 +7,23 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var jwt = require('jsonwebtoken');
 var database = require('./config/database');
-
-var morgan = require('morgan');
-var multer = require('multer');
-
-
+var cors = require("cors");
 var index = require('./routes/index');
 var users = require('./routes/users');
 var products = require('./routes/products');
 var protects = require('./middleware/protects');
 var books = require('./routes/books');
-var fileuploads = require('./routes/fileuploads');
+/* var fileuploads = require('./routes/fileuploads'); */
 var items = require('./routes/items');
 var drivers = require('./routes/drivers');
 var resets = require('./routes/resets');
 var vehicletypes = require('./routes/vehicle/vehicletypes');
 var emails = require('./routes/emails');
-var uploads = require('./routes/uploads');
-
+/* var uploads = require('./routes/uploads'); */
 
 var app = express();
+
+app.use(cors());
 global.__base = __dirname + "/"
 var swaggerJsDoc = require('swagger-jsdoc');
 var swaggerconf = require('./config/swaggerconf');
@@ -56,21 +53,16 @@ app.use(require('morgan')('short'));
 
 
 
-app.use('/', index);
-
-
+app.use('/', index);  
 app.use('/books', books);
 app.use('/users', users);
 app.use('/api', protects);
 app.use('/products', products);
 app.use('/vehicletypes', vehicletypes);
-app.use('/fileuploads', fileuploads);
 app.use('/items', items);
 app.use('/drivers', drivers);
 app.use('/emails', emails);
 app.use('/resets', resets);
-app.use('/uploads', uploads);
-
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
   err.status = 404;
@@ -96,9 +88,9 @@ app.use(function(req, res, next) {
 
 console.log("this is db connection", database.dbConnection);
 
-mongoose.connect(database.dbConnection, { useMongoClient: true })
+/* mongoose.connect(database.dbConnection, { useMongoClient: true })
 .then(()=> console.log('connection successfull'))
-.catch((err)=> console.console.error(err));
+.catch((err)=> console.error(err)); */
 
 // error handler
 app.use(function(err, req, res, next) {
